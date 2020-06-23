@@ -4,13 +4,14 @@ import { useParams } from 'react-router-dom';
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
 import {VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../shared/util/validators';
+import { useForm } from '../../shared/hooks/form-hook'; 
 import './PlaceForm.css';
 
 const DUMMY_PLACES = [
     {
         id: "p1",
         title: 'Empire State Building',
-        descripton: 'One of most famous building in USA',
+        description: 'One of most famous building in USA',
         imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR5W-FVA1C7EKr5kWtmjsv6WHjtXyw-uhZaXSSkbZ7cldNVNGC5&usqp=CAU' ,
         address: '20 W 34th St, New York, NY 10001',
         location: {
@@ -22,7 +23,7 @@ const DUMMY_PLACES = [
     {
         id: "p2",
         title: 'Empire State Building',
-        descripton: 'One of most famous building in USA',
+        description: 'One of most famous building in USA',
         imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTqVOIizBACvXaMPGk_2LiEzIOFT5ZKDocjigABxhjANz_E0zBw&usqp=CAU' ,
         address: '20 W 34th St, New York, NY 10001',
         location: {
@@ -38,6 +39,22 @@ const UpdatePlace = () => {
 
     const identifiedPlace = DUMMY_PLACES.find(p => p.id === placeId);
 
+    const [formState, inputHandler] = useForm({
+        title: {
+            value: identifiedPlace.title,
+            isValid: true
+        },
+        description: {
+            value: identifiedPlace.description,
+            isValid: true
+        }
+    }, true);
+
+    const placeUpdateSubmitHandler = event => {
+        event.preventDefault();
+        console.log(formState.inputs);
+    };
+
     if(!identifiedPlace){
         return (
             <div className="center">
@@ -46,12 +63,30 @@ const UpdatePlace = () => {
         )
     }
 
-    return <form className="place-form">
-        <Input id="title" element="input" type="text" label="Title" validators={[VALIDATOR_REQUIRE()]} errorTexr="Please enter a valid Title" onInput={() => {}} value={identifiedPlace.title} valid={true} />
+    return <form className="place-form" onSubmit={placeUpdateSubmitHandler}>
+        <Input 
+            id="title" 
+            element="input" 
+            type="text" 
+            label="Title" 
+            validators={[VALIDATOR_REQUIRE()]} 
+            errorTexr="Please enter a valid Title" 
+            onInput={inputHandler} 
+            initialValue={formState.inputs.title.value} 
+            initialValid={formState.inputs.title.isValid} 
+        />
 
-        <Input id="description" element="textarea" label="Description" validators={[VALIDATOR_MINLENGTH(5)]} errorTexr="Please enter a valid Description (min 5 length caracters)." onInput={() => {}} value={identifiedPlace.descripton} valid={true} />
+        <Input 
+            id="description" 
+            element="textarea" 
+            label="Description" 
+            validators={[VALIDATOR_MINLENGTH(5)]} 
+            errorTexr="Please enter a valid Description (min 5 length caracters)." onInput={inputHandler} 
+            initialValue={formState.inputs.description.value} 
+            initialValid={formState.inputs.description.isValid} 
+        />
 
-        <Button type="submit" disabled={true}>
+        <Button type="submit" disabled={!formState.isValid}>
             UPDATE PLACE
         </Button>
     </form>
