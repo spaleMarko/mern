@@ -5,6 +5,6 @@ const placesRouter = require('./routes/places-routes');
 
 const app = express();
 
-app.use(placesRouter);
+app.use('/api/places', placesRouter); // => /api/places/...
 
 app.listen(5000);
