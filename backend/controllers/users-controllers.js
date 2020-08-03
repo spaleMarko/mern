@@ -15,17 +15,25 @@ let DUMMY_USERS = [
 ];
 
 // Not in video
-const getUserById = (req, res, next) => {
-    const userId = req.params.uid; // { uid: u1}
-    const user = DUMMY_USERS.find(u => {
-        return u.id === userId;
-    });
-
-    if(!user){
-        throw new HttpError('Could not find a user for the provided id.', 404);
+const getUserById = async (req, res, next) => {
+    const userId = req.params.uid;
+    let user;
+    try{
+        user = await User.findById(userId);
+    }catch(err){
+        const error = new HttpError(
+            'Something went wrong, could not find a User',
+            500
+        );
+        return next(error);
     }
 
-    res.json({user}); // => { user } => { user: user}
+    if(!user){
+        const error = new HttpError('Could not find a User for the provided id.', 404);
+        return next(error);
+    }
+
+    res.json({ user: user.toObject({ getters: true }) });
 }
 
 const getUsers = async (req, res, next) => {
