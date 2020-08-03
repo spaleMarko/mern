@@ -58,7 +58,7 @@ const signup = async (req, res, next) => {
         return  next(HttpError('Invalid inputs passed, please check your data', 422));
     }
 
-    const { name, email, password, places} = req.body;
+    const { name, email, password } = req.body;
     let existingUser;
     try{
         existingUser = await User.findOne({email: email});
@@ -81,7 +81,7 @@ const signup = async (req, res, next) => {
         email,
         image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxHWFss7T4f3QifjwCTUJ-VGqffPBBDI1VlQ&usqp=CAU',
         password,
-        places
+        places: []
     });
 
     try{
