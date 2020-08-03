@@ -3,6 +3,7 @@ const {validationResult } = require('express-validator');
 
 const HttpError = require('../models/http-error');
 const User = require('../models/user');
+const user = require('../models/user');
 
 let DUMMY_USERS = [
     {
@@ -13,7 +14,7 @@ let DUMMY_USERS = [
     }
 ];
 
-// Not in vide
+// Not in video
 const getUserById = (req, res, next) => {
     const userId = req.params.uid; // { uid: u1}
     const user = DUMMY_USERS.find(u => {
@@ -27,8 +28,18 @@ const getUserById = (req, res, next) => {
     res.json({user}); // => { user } => { user: user}
 }
 
-const getUsers = (req, res, next) => {
-    res.json({users: DUMMY_USERS});
+const getUsers = async (req, res, next) => {
+    let users;
+    try{
+        users = await User.find({}, '-password'); // ({}, 'name email') // same
+    }catch(err){
+        const error = new HttpError(
+            'Fetching users failde, please try again later', 500
+        );
+        return next(error);
+    }
+
+    res.json({users: users.map(user => user.toObject({getters: true}))});
 };
 
 const signup = async (req, res, next) => {
