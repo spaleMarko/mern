@@ -26,7 +26,7 @@ app.use((error, req, res, next) => {
     res.json({message: error.message || 'An unknow error occurred!'});
 });
 
-mongoose.connect('mongodb+srv://spale:spale123@cluster0.25cnz.mongodb.net/places?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://spale:spale123@cluster0.25cnz.mongodb.net/mern?retryWrites=true&w=majority')
     .then(() => {
         app.listen(5000);
     })
