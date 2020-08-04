@@ -8,20 +8,6 @@ const Place = require('../models/place');
 const User = require('../models/user');
 const mongooseUniqueValidator = require('mongoose-unique-validator');
 
-let DUMMY_PLACES = [
-    {
-        id: 'p1',
-        title: 'Empire State Building',
-        description: 'One of the most famous building',
-        location: {
-            lat: 40.7484474,
-            lng: -73.9871516
-        },
-        address: '20 W 34t St, New York, NY 10001',
-        creator: 'u1'
-    }
-];
-
 const getPlaceById = async (req, res, next) => {
     const placeId = req.params.pid; // { pid: p1}
     let place;
