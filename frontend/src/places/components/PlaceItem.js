@@ -4,12 +4,15 @@ import Card from '../../shared/components/UlElements/Card';
 import Button from '../../shared/components/FormElements/Button';
 import Modal from '../../shared/components/UlElements/Modal';
 import Map from '../../shared/components/UlElements/Map';
+import ErrorModal from '../../shared/components/UlElements/ErrorModal';
+import LoadingSpinner from '../../shared/components/UlElements/LoadingSpinner';
 import {AuthContext} from '../../shared/context/auth-context';
+import { useHttpClient } from '../../shared/hooks/http-hook';
 import './PlaceItem.css';
 
 const PlaceItem = props => {
     const auth = useContext(AuthContext);
-
+    const {isLoading, error, sendRequest, clearError} = useHttpClient();
     const [ showMap, setShowMap] = useState(false);
     const [ showConfirmModal, setShowConfirmModal] = useState(false);
 
@@ -25,13 +28,18 @@ const PlaceItem = props => {
         setShowConfirmModal(false);
     };
 
-    const confirmDeleteHandler = () => {
+    const confirmDeleteHandler = async () => {
         setShowConfirmModal(false);
-        console.log('DELETING');
+        try{
+            await sendRequest(`http://localhost:5000/api/places/${props.id}`, 'DELETE');
+
+            props.onDelete(props.id);
+        }catch(err){}
     };
 
     return (
         <React.Fragment>
+            <ErrorModal error={error} onClear={clearError} />
             <Modal show={showMap} onCancel={closeMapHandler} header={props.address} contentClass="place-item__modal-content" footerClass="place-item__modal-actions" footer={<Button onClick={closeMapHandler}>CLOSE</Button>}>
                 <div className="map-container">
                     <Map center={props.coordinates} zoom={16} />
@@ -55,6 +63,7 @@ const PlaceItem = props => {
 
             <li className="place-item">
                 <Card className="place-item__content">
+                    {isLoading && <LoadingSpinner asOverlay />}
                     <div className="place-item__image">
                         <img src={props.image} alt={props.title} />
                     </div>
