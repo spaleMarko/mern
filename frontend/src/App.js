@@ -20,7 +20,7 @@ const App = () => {
   const login = useCallback((uid, token, expirationDate) => {
     setToken(token);
     setUserId(uid);
-    const tokenExpirationDate = expirationDate || new Date(new Date().getTime() +1000 * 60 * 60); // Not same variable other scopes
+    const tokenExpirationDate = expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60); // Not same variable other scopes
     setTokenExpirationDate(tokenExpirationDate);
     localStorage.setItem(
       'userData',
@@ -30,6 +30,7 @@ const App = () => {
 
   const logout = useCallback(() => {
     setToken(null);
+    setTokenExpirationDate(null);
     setUserId(null);
     localStorage.removeItem('userData');
   }, []);
