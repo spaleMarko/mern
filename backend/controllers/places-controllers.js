@@ -1,6 +1,5 @@
 const fs = require('fs');
 
-const { v4: uuidv4 } = require('uuid');
 const {validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 
@@ -8,7 +7,6 @@ const HttpError = require('../models/http-error');
 const getCoordsForAddress = require('../util/location');
 const Place = require('../models/place');
 const User = require('../models/user');
-const mongooseUniqueValidator = require('mongoose-unique-validator');
 
 const getPlaceById = async (req, res, next) => {
     const placeId = req.params.pid; // { pid: p1}
