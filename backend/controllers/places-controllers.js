@@ -72,7 +72,7 @@ const createPlace = async (req, res, next) => {
         description,
         address,
         location: coordinates,
-        image: 'https://media.atre.yardi.com/2/51438/images/empre-state-building-1.jpg',
+        image: req.file.path,
         creator
     });
 
