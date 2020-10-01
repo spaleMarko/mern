@@ -11,6 +11,7 @@ router.get('/:uid', usersControllers.getUserById); // Not in Video
 
 router.post(
     '/signup',
+    fileUpload.single('image'),
     [
         check('name')
             .not()
