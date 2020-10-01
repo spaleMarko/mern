@@ -49,6 +49,7 @@ const signup = async (req, res, next) => {
     }
 
     const { name, email, password } = req.body;
+
     let existingUser;
     try{
         existingUser = await User.findOne({email: email});
@@ -69,7 +70,7 @@ const signup = async (req, res, next) => {
     const createdUser = new User({
         name,
         email,
-        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSxHWFss7T4f3QifjwCTUJ-VGqffPBBDI1VlQ&usqp=CAU',
+        image: req.file.path,
         password,
         places: []
     });
